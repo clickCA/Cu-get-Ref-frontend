@@ -2,7 +2,9 @@ import { useState } from 'react'
 import './App.css'
 import AuthenticationPage from './auth/register'
 import Login from './auth/login';
+import AddCourse from './courseManagement/addCourse';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Form } from 'node_modules/react-router-dom/dist/index';
 
 function App() {
   const routes = [
@@ -13,6 +15,10 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/form",
+      element: <AddCourse />,
     },
   ];
 
