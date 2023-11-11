@@ -1,5 +1,4 @@
-import * as React from "react"
-import { ReviewInterface } from "@/interface/review.interface"
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,23 +10,59 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { CourseInterface } from '@/interface/course.interface';
+const CourseInfo: React.FC<{ course: CourseInterface }> = ({ course }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div>
+      <h3>{course.courseId}</h3>
+      <h3>{course.courseName}</h3>
+      <p>{course.courseDescription}</p>
+      <p>{course.facultyDepartment}</p>
+      <p>{course.academicTerm}</p>
+      <p>{course.academicYear}</p>
+    </div>
+    <div>
+      <p>{course.professors}</p>
+      <p>{course.prerequisites}</p>
+      <p>{course.status}</p>
+      <p>{course.curriculumName}</p>
+      <p>{course.degreeLevel}</p>
+      <p>{course.teachingHours}</p>
+    </div>
+  </div>
+);
 export function Review() {
+  const [courses, setCourses] = useState<CourseInterface[]>([]);
+  useEffect(() => {
+    // Fetch course data (mock data for demonstration)
+    const fetchData = async () => {
+      try {
+        // Assuming you have an API endpoint to fetch course data
+        const response = await fetch('/api/courses');
+        const data = await response.json();
+
+        // Update the state with the fetched courses
+        setCourses(data);
+      } catch (error) {
+        console.error('Error fetching course data:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
 
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Review Course</CardTitle>
-        <CardDescription>Software Engineer</CardDescription>
+      <div>
+        <h2>Course Viewer</h2>
+        {courses.map((course) => (
+          <CourseInfo key={course.id} course={course} />
+        ))}
+      </div>
       </CardHeader>
       <CardContent>
         <form>
@@ -50,3 +85,10 @@ export function Review() {
   )
 }
 export default Review;
+
+
+
+
+
+
+

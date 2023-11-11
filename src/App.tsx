@@ -20,6 +20,7 @@ function App() {
       path: "/review",
       element: <Review />,
     },
+    
   ];
 
   return <RouterProvider router={createBrowserRouter(routes)} />

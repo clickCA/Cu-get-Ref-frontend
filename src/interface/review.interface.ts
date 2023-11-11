@@ -1,7 +1,7 @@
 export interface ReviewInterface{
-	ID: string;
-	REVIEWER: string;
-	DATE: Date;
-	MESSAGE: string;
-	RATING: number;
+	id: string;
+	reviewer: string;
+	date: Date;
+	message: string;
+	rating: number;
 }
