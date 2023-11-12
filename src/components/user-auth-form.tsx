@@ -13,22 +13,30 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { register } from '@/api/authService'
+import { register, Role, AuthRequest, AuthResponse, roleMapper } from '@/api/authService'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [error, setError] = React.useState<string | null>(null)
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
-        const body = {
+        const body: AuthRequest = {
             email: event.target[0].value,
             password: event.target[1].value,
             role: event.target[3].value,
         }
         setIsLoading(true)
         const response = await register(import.meta.env.VITE_AUTH_SERVER, body)
+            .catch((error) => {
+                setError(error.message)
+                return null
+            })
+            .then((response) => {
+                return response
+            })
         console.log(response)
         setIsLoading(false)
     }
@@ -77,15 +85,21 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Roles</SelectLabel>
-                                    <SelectItem value='student'>student</SelectItem>
-                                    <SelectItem value='professor'>teacher</SelectItem>
+                                    <SelectItem value={roleMapper(Role.Admin)}>Admin</SelectItem>
+                                    <SelectItem value={roleMapper(Role.Student)}>Student</SelectItem>
+                                    <SelectItem value={roleMapper(Role.Professor)}>Teacher</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
+                    {error && (
+                        <div className='text-red-500 text-sm font-medium'>
+                            <p>{error}</p>
+                        </div>
+                    )}
                     <Button disabled={isLoading}>
                         {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
-                        Sign In with Email
+                        Sign Up with Email
                     </Button>
                 </div>
             </form>
