@@ -103,7 +103,6 @@ const UpdateProfileStudent: React.FC<ProfileStudentInterface> = () => {
               <Input type="text" value={major} onChange={handleMajorChange} />
             </div>
             <Button type="submit">
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               Update Profile
           </Button>
             
