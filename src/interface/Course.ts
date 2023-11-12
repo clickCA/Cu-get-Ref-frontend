@@ -12,6 +12,21 @@ export interface CourseInterface {
     degreeLevel: string
     teachingHours: number
 }
+
+export interface CourseProps {
+    courseId: string
+    courseName: string
+    courseDescription: string
+    facultyDepartment: string
+    academicTerm: string
+    academicYear: number
+    professors: string
+    prerequisites: string
+    status: string
+    curriculumName: string
+    degreeLevel: string
+    teachingHours: number
+}
 // {
 //     "academic_term": "summer",
 //     "academic_year": 2023,
