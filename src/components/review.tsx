@@ -95,7 +95,7 @@ export function Review() {
             <Textarea htmlFor="message" placeholder="Review here" />
           </div> 
               
-            </form>
+          </form>
           </div>
         </div>
       </div>
