@@ -1,26 +1,11 @@
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { UserAuthForm } from '@/components/user-auth-form'
+import PictureRegister from '@/assets/i_am_fine.jpg'
 
 export default function AuthenticationPage() {
     return (
         <>
-            <div className='md:hidden'>
-                <img
-                    src='/examples/authentication-light.png'
-                    width={1280}
-                    height={843}
-                    alt='Authentication'
-                    className='block dark:hidden'
-                />
-                <img
-                    src='/examples/authentication-dark.png'
-                    width={1280}
-                    height={843}
-                    alt='Authentication'
-                    className='hidden dark:block'
-                />
-            </div>
             <div className='container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
                 <a
                     href='/login'
@@ -44,6 +29,9 @@ export default function AuthenticationPage() {
                             <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
                         </svg>
                         Cu get ref
+                    </div>
+                    <div className='relative z-20 mt-auto'>
+                        <img src={PictureRegister} width={1280} height={843} alt='Authentication' />
                     </div>
                     <div className='relative z-20 mt-auto'>
                         <blockquote className='space-y-2'>
