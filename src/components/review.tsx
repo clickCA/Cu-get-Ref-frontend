@@ -54,34 +54,52 @@ export function Review() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-    <Card className="w-[350px]">
-      <CardHeader>
-      <div>
-        <h2>Course Viewer</h2>
-        {courses.map((course) => (
-          <CourseInfo key={course.id} course={course} />
-        ))}
-      </div>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a
+          href="#"
+          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+        >
+         <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2 h-6 w-6"
+            >
+              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+            </svg>
+          Cu get ref
+        </a>
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Review the course
+            </h1>
+            <div>
+            <h2>Course Viewer</h2>
+              {courses.map((course) => (
+              <CourseInfo key={course.id} course={course} />
+            ))}
+            </div>
+            <form className="space-y-4 md:space-y-6" action="#">
+            <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="RATING">Rating</Label>
-              <Input id="RATING" type="number" min = "0" max = "10" />
+              <Label htmlFor="rating">Rating</Label>
+              <Input id="rating" type="number" min = "1" max = "5" />
             </div>
             
-            <Textarea htmlFor="MESSAGE" placeholder="Review here" />
+            <Textarea htmlFor="message" placeholder="Review here" />
+          </div> 
+              
+            </form>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Review</Button>
-      </CardFooter>
-    </Card>
-    </div>
+        </div>
+      </div>
+    </section>
   )
 }
 export default Review;
