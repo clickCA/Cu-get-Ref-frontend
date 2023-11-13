@@ -1,182 +1,176 @@
-import { FC, ChangEvent, MouseEvent, useState, Dispatch, SetStateAction } from 'react'
-import { CourseProps } from '@/interface/Course'
-import { Label } from './label'
-import { Input } from './input'
+import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+import { Slot } from "@radix-ui/react-slot"
+import {
+  Controller,
+  ControllerProps,
+  FieldPath,
+  FieldValues,
+  FormProvider,
+  useFormContext,
+} from "react-hook-form"
 
-interface Props {
-    courseList: CourseProps['courseList']
-    setCourseList: Dispatch<SetStateAction<CourseProps['courseList']>>
+import { cn } from "@/lib/utils"
+import { Label } from "@/components/ui/label"
+
+const Form = FormProvider
+
+type FormFieldContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> = {
+  name: TName
 }
 
-const Form: FC<Props> = ({ courseList, setCourseList }) => {
-    const [courseId, setCourseId] = useState('')
-    const [courseName, setCourseName] = useState('')
-    const [courseDescription, setCourseDescription] = useState('')
-    const [facultyDepartment, setFacultyDepartment] = useState('')
-    const [academicTerm, setAcademicTerm] = useState('')
-    const [academicYear, setAcademicYear] = useState(0)
-    const [professors, setProfessors] = useState('')
-    const [prerequisites, setPrerequisites] = useState('')
-    const [status, setStatus] = useState('')
-    const [curriculumName, setCurriculumName] = useState('')
-    const [degreeLevel, setDegreeLevel] = useState('')
-    const [teachingHours, setTeachingHours] = useState(0)
+const FormFieldContext = React.createContext<FormFieldContextValue>(
+  {} as FormFieldContextValue
+)
 
-    const setCourseIdInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setCourseId(event.target.value)
-    }
-    const setCourseNameInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setCourseName(event.target.value)
-    }
-    const setCourseDescriptionInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setCourseDescription(event.target.value)
-    }
-    const setFacultyDepartmentInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setFacultyDepartment(event.target.value)
-    }
-    const setAcademicTermInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setAcademicTerm(event.target.value)
-    }
-    const setAcademicYearInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setAcademicYear(event.target.value)
-    }
-    const setProfessorsInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setProfessors(event.target.value)
-    }
-    const setPrerequisitesInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setPrerequisites(event.target.value)
-    }
-    const setStatusInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setStatus(event.target.value)
-    }
-    const setCurriculumNameInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setCurriculumName(event.target.value)
-    }
-    const setDegreeLevelInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setDegreeLevel(event.target.value)
-    }
-    const setTeachingHoursInputHandler = (event: ChangEvent<HTMLInputElement>) => {
-        setTeachingHours(event.target.value)
-    }
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  )
+}
 
-    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-        const courseData = {
-            courseId,
-            courseName,
-            courseDescription,
-            facultyDepartment,
-            academicTerm,
-            academicYear,
-            professors,
-            prerequisites,
-            status,
-            curriculumName,
-            degreeLevel,
-            teachingHours,
-        }
-        setCourseList([...courseList, courseData])
-        setCourseId('')
-        setCourseName('')
-        setCourseDescription('')
-        setFacultyDepartment('')
-        setAcademicTerm('')
-        setAcademicYear(0)
-        setProfessors('')
-        setPrerequisites('')
-        setStatus('')
-        setCurriculumName('')
-        setDegreeLevel('')
-        setTeachingHours(0)
-    }
+const useFormField = () => {
+  const fieldContext = React.useContext(FormFieldContext)
+  const itemContext = React.useContext(FormItemContext)
+  const { getFieldState, formState } = useFormContext()
 
-    return (
-        <div>
-            <h1>Form</h1>
-            <div className='form-container'>
-                <div className='form-div'>
-                    <Label htmlFor='courseId'>CourseId</Label>
-                    <Input type='text' name='courseId' value={courseId} onChange={setCourseIdInputHandler} />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='courseName'>Course Name</Label>
-                    <Input type='text' name='courseName' value={courseName} onChange={setCourseNameInputHandler} />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='courseDescription'>Course Description</Label>
-                    <Input
-                        type='text'
-                        name='courseDescription'
-                        value={courseDescription}
-                        onChange={setCourseDescriptionInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='facultyDepartment'>Faculty Department</Label>
-                    <Input
-                        type='text'
-                        name='facultyDepartment'
-                        value={facultyDepartment}
-                        onChange={setFacultyDepartmentInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='academicTerm'>Academic Term</Label>
-                    <Input
-                        type='text'
-                        name='academicTerm'
-                        value={academicTerm}
-                        onChange={setAcademicTermInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='academicYear'>Academic Year</Label>
-                    <Input
-                        type='number'
-                        name='academicYear'
-                        value={academicYear}
-                        onChange={setAcademicYearInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='professors'>Professors</Label>
-                    <Input type='text' name='professors' value={professors} onChange={setProfessorsInputHandler} />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='prerequisites'>Prerequisites</Label>
-                    <Input
-                        type='text'
-                        name='prerequisites'
-                        value={prerequisites}
-                        onChange={setPrerequisitesInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='status'>Status</Label>
-                    <Input type='text' name='status' value={status} onChange={setStatusInputHandler} />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='curriculumName'>Curriculum Name</Label>
-                    <Input
-                        type='text'
-                        name='curriculumName'
-                        value={curriculumName}
-                        onChange={setCurriculumNameInputHandler}
-                    />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='degreeLevel'>Degree Level</Label>
-                    <Input type='text' name='degreeLevel' value={degreeLevel} onChange={setDegreeLevelInputHandler} />
-                </div>
-                <div className='form-div'>
-                    <Label htmlFor='teachingHours'>Teaching Hours</Label>
-                    <Input
-                        type='number'
-                        name='teachingHours'
-                        value={teachingHours}
-                        onChange={setTeachingHoursInputHandler}
-                    />
-                </div>
-            </div>
-        </div>
-    )
+  const fieldState = getFieldState(fieldContext.name, formState)
+
+  if (!fieldContext) {
+    throw new Error("useFormField should be used within <FormField>")
+  }
+
+  const { id } = itemContext
+
+  return {
+    id,
+    name: fieldContext.name,
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    ...fieldState,
+  }
+}
+
+type FormItemContextValue = {
+  id: string
+}
+
+const FormItemContext = React.createContext<FormItemContextValue>(
+  {} as FormItemContextValue
+)
+
+const FormItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  const id = React.useId()
+
+  return (
+    <FormItemContext.Provider value={{ id }}>
+      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+    </FormItemContext.Provider>
+  )
+})
+FormItem.displayName = "FormItem"
+
+const FormLabel = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ className, ...props }, ref) => {
+  const { error, formItemId } = useFormField()
+
+  return (
+    <Label
+      ref={ref}
+      className={cn(error && "text-destructive", className)}
+      htmlFor={formItemId}
+      {...props}
+    />
+  )
+})
+FormLabel.displayName = "FormLabel"
+
+const FormControl = React.forwardRef<
+  React.ElementRef<typeof Slot>,
+  React.ComponentPropsWithoutRef<typeof Slot>
+>(({ ...props }, ref) => {
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+
+  return (
+    <Slot
+      ref={ref}
+      id={formItemId}
+      aria-describedby={
+        !error
+          ? `${formDescriptionId}`
+          : `${formDescriptionId} ${formMessageId}`
+      }
+      aria-invalid={!!error}
+      {...props}
+    />
+  )
+})
+FormControl.displayName = "FormControl"
+
+const FormDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => {
+  const { formDescriptionId } = useFormField()
+
+  return (
+    <p
+      ref={ref}
+      id={formDescriptionId}
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  )
+})
+FormDescription.displayName = "FormDescription"
+
+const FormMessage = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  const { error, formMessageId } = useFormField()
+  const body = error ? String(error?.message) : children
+
+  if (!body) {
+    return null
+  }
+
+  return (
+    <p
+      ref={ref}
+      id={formMessageId}
+      className={cn("text-sm font-medium text-destructive", className)}
+      {...props}
+    >
+      {body}
+    </p>
+  )
+})
+FormMessage.displayName = "FormMessage"
+
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
 }
