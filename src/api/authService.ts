@@ -25,7 +25,7 @@ export interface AuthRequest {
     role: Role
 }
 
-export async function login(path: string, body: AuthRequest): Promise<LoginResponse> {
+export async function login(path: string, body: AuthRequest) {
     await fetch(`${path}/login`, {
         method: 'POST',
         headers: {
@@ -39,9 +39,9 @@ export async function login(path: string, body: AuthRequest): Promise<LoginRespo
     })
         .then((res) => {
             if (res.ok) {
-                return res.json().then((data) => {
+                return res.json().then((data: LoginResponse) => {
                     // 1/48 = 30 minutes
-                    const expire = 1 / 48
+                    const expire = import.meta.env.VITE_TOKEN_EXPIRE
                     Cookies.set('token', data.token, { expires: expire })
                 })
             } else {
@@ -54,33 +54,31 @@ export async function login(path: string, body: AuthRequest): Promise<LoginRespo
         })
 }
 
-export async function register(path: string, body: AuthRequest): Promise<RegisterResponse> {
-    try {
-        const response = await fetch(`${path}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: body.email, // Replace with actual email input value
-                password: body.password, // Replace with actual password input value
-                role: body.role, // Use the selected role
-            }),
+export async function register(path: string, body: AuthRequest) {
+    await fetch(`${path}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: body.email, // Replace with actual email input value
+            password: body.password, // Replace with actual password input value
+            role: body.role, // Use the selected role
+        }),
+    })
+        .then((res) => {
+            if (res.ok) {
+                return res.json().then((data: RegisterResponse) => {
+                    console.table(data)
+                })
+            } else {
+                throw new Error('Register failed')
+            }
         })
-
-        if (response.ok) {
-            const message: RegisterResponse = response.body
-            // Login was successful, handle accordingly (e.g., redirect to another page)
-            return message
-        } else {
-            // Login failed, handle accordingly (e.g., show an error message)
-            throw new Error('Register failed')
-        }
-    } catch (error) {
-        if (error.message === 'Register failed') throw new Error('Register failed')
-        // Handle network or request errors
-        throw new Error("Couldn't connect to the server")
-    }
+        .catch((err) => {
+            if (err.message === 'Register failed') throw new Error('Register failed')
+            throw new Error("Couldn't connect to the server")
+        })
 }
 
 export function roleMapper(role: Role): string {

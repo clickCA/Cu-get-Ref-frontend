@@ -18,10 +18,10 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-
+    const HOME_PAGE = '/updateProfileStudent'
     useEffect(() => {
         if (Cookies.get('token')) {
-            window.location.href = '/'
+            window.location.href = HOME_PAGE
         }
     }, [])
 
@@ -40,7 +40,7 @@ const Login = () => {
                 return null
             })
             .then(() => {
-                navigate('/')
+                navigate(HOME_PAGE)
             })
         setIsLoading(false)
     }

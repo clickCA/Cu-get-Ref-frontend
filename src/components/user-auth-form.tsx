@@ -13,31 +13,43 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { register, Role, AuthRequest, roleMapper, enumMapper, RegisterResponse } from '@/api/authService'
+import { register, Role, AuthRequest, roleMapper, enumMapper } from '@/api/authService'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import Cookies from 'js-cookie'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [error, setError] = React.useState<string | null>(null)
+    const navigate = useNavigate()
+    const HOME_PAGE = '/updateProfileStudent'
+    const LOGIN_PAGE = '/login'
+
+    useEffect(() => {
+        if (Cookies.get('token')) {
+            window.location.href = HOME_PAGE
+        }
+    }, [])
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
+        setError(null)
         const body: AuthRequest = {
             email: event.target[0].value,
             password: event.target[1].value,
             role: enumMapper(event.target[3].value),
         }
         setIsLoading(true)
-        const response: RegisterResponse | null = await register(import.meta.env.VITE_AUTH_SERVER, body)
+        await register(import.meta.env.VITE_AUTH_SERVER, body)
+            .then(() => {
+                navigate(LOGIN_PAGE)
+            })
             .catch((error) => {
                 setError(error.message)
                 return null
             })
-            .then((response) => {
-                return response
-            })
-        console.table(response)
         setIsLoading(false)
     }
 
