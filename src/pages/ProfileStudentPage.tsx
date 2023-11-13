@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ProfileStudentInterface } from '../interface/ProfileStudent'
+import { ProfileStudentInterface } from '@/interface/ProfileStudent'
 import { Button } from '@/components/ui/button'
-import { Icons } from '@/components/icons'
 
 const UpdateProfileStudent: React.FC<ProfileStudentInterface> = () => {
     const [name, setName] = useState<string>('')

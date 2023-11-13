@@ -1,7 +1,7 @@
 import './App.css'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
-import UpdateProfileStudent from './components/profileStudent'
+import ProfileStudentPage from './pages/ProfileStudentPage'
 import Review from './components/review'
 import AddCourse from './courseManagement/addCourse'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom'
@@ -36,7 +36,7 @@ function App() {
             children: [
                 {
                     path: '',
-                    element: <UpdateProfileStudent />,
+                    element: <ProfileStudentPage />,
                 },
                 {
                     path: 'review',
