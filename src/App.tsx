@@ -1,6 +1,6 @@
 import './App.css'
-import AuthenticationPage from './auth/register'
-import Login from './auth/login'
+import RegisterPage from './pages/RegisterPage'
+import LoginPage from './pages/LoginPage'
 import UpdateProfileStudent from './components/profileStudent'
 import Review from './components/review'
 import AddCourse from './courseManagement/addCourse'
@@ -10,11 +10,11 @@ function App() {
     const routes = [
         {
             path: '/',
-            element: <AuthenticationPage />,
+            element: <RegisterPage />,
         },
         {
             path: '/login',
-            element: <Login />,
+            element: <LoginPage />,
         },
         {
             path: '/updateProfileStudent',
