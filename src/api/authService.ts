@@ -3,35 +3,32 @@ export enum Role {
     Student = 1,
     Professor = 2,
 }
-export interface AuthResponse {
-    token: string
-    user: {
-        createdAt: string
-        deletedAt: {
-            time: string
-            valid: boolean
-        }
-        email: string
-        id: number
-        passwordHash: string
-        role: Role
-        updatedAt: string
-    }
+
+export interface RegisterResponse {
+    ID: number
+    CreatedAt: string
+    UpdatedAt: string
+    DeletedAt: null
+    Email: string
+    PasswordHash: string
+    Role: Role
 }
 
+export interface LoginResponse {
+    token: string
+}
 export interface AuthRequest {
     email: string
     password: string
     role: Role
 }
 
-export async function login(path: string, body: AuthRequest, token: string): Promise<AuthResponse> {
+export async function login(path: string, body: AuthRequest): Promise<LoginResponse> {
     try {
-        const response = await fetch(path, {
+        const response = await fetch(`${path}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 email: body.email, // Replace with actual email input value
@@ -54,9 +51,9 @@ export async function login(path: string, body: AuthRequest, token: string): Pro
     }
 }
 
-export async function register(path: string, body: AuthRequest): Promise<AuthResponse> {
+export async function register(path: string, body: AuthRequest): Promise<RegisterResponse> {
     try {
-        const response = await fetch(path, {
+        const response = await fetch(`${path}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +66,7 @@ export async function register(path: string, body: AuthRequest): Promise<AuthRes
         })
 
         if (response.ok) {
-            const message: AuthResponse = response.body
+            const message: RegisterResponse = response.body
             // Login was successful, handle accordingly (e.g., redirect to another page)
             return message
         } else {
@@ -90,5 +87,17 @@ export function roleMapper(role: Role): string {
             return 'Professor'
         case Role.Student:
             return 'Student'
+    }
+}
+export function enumMapper(role: string): Role {
+    switch (role) {
+        case 'Admin':
+            return Role.Admin
+        case 'Professor':
+            return Role.Professor
+        case 'Student':
+            return Role.Student
+        default:
+            return Role.Student
     }
 }

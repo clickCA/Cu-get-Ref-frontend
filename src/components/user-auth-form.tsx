@@ -13,7 +13,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { register, Role, AuthRequest, AuthResponse, roleMapper } from '@/api/authService'
+import { register, Role, AuthRequest, roleMapper, enumMapper, RegisterResponse } from '@/api/authService'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -26,10 +26,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         const body: AuthRequest = {
             email: event.target[0].value,
             password: event.target[1].value,
-            role: event.target[3].value,
+            role: enumMapper(event.target[3].value),
         }
         setIsLoading(true)
-        const response = await register(import.meta.env.VITE_AUTH_SERVER, body)
+        const response: RegisterResponse | null = await register(import.meta.env.VITE_AUTH_SERVER, body)
             .catch((error) => {
                 setError(error.message)
                 return null
@@ -37,7 +37,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             .then((response) => {
                 return response
             })
-        console.log(response)
+        console.table(response)
         setIsLoading(false)
     }
 
