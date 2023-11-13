@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -145,7 +146,21 @@ const SVG_IMAGES = {
 }
 
 export default function Sidebar({ className }: SidebarProps) {
-    const [active, setActive] = useState('profile')
+    const [active, setActive] = useState([true, false, false, false, false])
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const path = window.location.pathname
+        if (path === '/main/') {
+            setActive([true, false, false, false, false])
+        } else if (path === '/main/form') {
+            setActive([false, false, true, false, false])
+        } else if (path === '/main/form/create') {
+            setActive([false, false, false, true, false])
+        } else if (path === '/main/review') {
+            setActive([false, false, false, false, true])
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const CustomButton = ({ children, active, onClick }: CustomButtonProps) => {
         let variant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | null | undefined = 'ghost'
@@ -166,42 +181,60 @@ export default function Sidebar({ className }: SidebarProps) {
                 <div className='px-3 py-2'>
                     <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>Profile</h2>
                     <div className='space-y-1'>
-                        <CustomButton active>
+                        <CustomButton
+                            active={active[0]}
+                            onClick={() => {
+                                setActive([true, false, false, false, false])
+                                navigate('/main/')
+                            }}
+                        >
                             {SVG_IMAGES.Profile}
                             My Profile
                         </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.Browse}
-                            Browse
-                        </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.Radio}
-                            Radio
+                        <CustomButton
+                            active={active[1]}
+                            onClick={() => {
+                                setActive([false, true, false, false, false])
+                                navigate('/main/')
+                            }}
+                        >
+                            {SVG_IMAGES.Profile}
+                            Update Profile
                         </CustomButton>
                     </div>
                 </div>
                 <div className='px-3 py-2'>
                     <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>Courses</h2>
                     <div className='space-y-1'>
-                        <CustomButton>
+                        <CustomButton
+                            active={active[2]}
+                            onClick={() => {
+                                setActive([false, false, true, false, false])
+                                navigate('/main/form')
+                            }}
+                        >
                             {SVG_IMAGES.Playlists}
                             All Courses
                         </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.Songs}
-                            Songs
+                        <CustomButton
+                            active={active[3]}
+                            onClick={() => {
+                                setActive([false, false, false, true, false])
+                                navigate('/main/form/create')
+                            }}
+                        >
+                            {SVG_IMAGES.Playlists}
+                            Create Course
                         </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.MadeForYou}
-                            Made for You
-                        </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.Artists}
-                            Artists
-                        </CustomButton>
-                        <CustomButton>
-                            {SVG_IMAGES.Albums}
-                            Albums
+                        <CustomButton
+                            active={active[4]}
+                            onClick={() => {
+                                setActive([false, false, false, false, true])
+                                navigate('/main/review')
+                            }}
+                        >
+                            {SVG_IMAGES.Playlists}
+                            Review
                         </CustomButton>
                     </div>
                 </div>

@@ -2,8 +2,9 @@ import './App.css'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import ProfileStudentPage from './pages/ProfileStudentPage'
-import Review from './components/review'
-import AddCourse from './courseManagement/addCourse'
+import ReviewPage from './pages/ReviewPage'
+import AddCoursePage from './pages/AddCoursePage'
+import AllCoursePage from './pages/AllCoursePage'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import PublicLayout from './layout/PublicLayout'
 import PrivateLayout from './layout/PrivateLayout'
@@ -41,13 +42,16 @@ function App() {
                     ),
                 },
                 {
-                    path: 'review',
-                    element: <Review />,
-                },
-
-                {
                     path: 'form',
-                    element: <AddCourse />,
+                    element: <AllCoursePage />,
+                },
+                {
+                    path: 'form/create',
+                    element: <AddCoursePage />,
+                },
+                {
+                    path: 'review',
+                    element: <ReviewPage />,
                 },
                 {
                     path: '*',
