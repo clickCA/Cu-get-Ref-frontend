@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ProfileStudentInterface } from '@/interface/ProfileStudent'
 import { Button } from '@/components/ui/button'
+import { createProfile, UserType } from '@/api/profileService'
 
 const UpdateProfileStudent: React.FC<ProfileStudentInterface> = () => {
     const [name, setName] = useState<string>('')
@@ -18,17 +19,22 @@ const UpdateProfileStudent: React.FC<ProfileStudentInterface> = () => {
         setEmail(event.target.value)
     }
 
-    const handleYearChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setYear(event.target.value)
     }
-    const handleMajorChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleMajorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMajor(event.target.value)
     }
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
         // Add logic here to update the user's profile with the new information
         console.log('Profile Updated:', { name, email, year, major })
+        await createProfile(import.meta.env.VITE_PROFILE_SERVER, {
+            email: 'test',
+            password: '123',
+            userType: UserType.STUDENT,
+        })
         // try {
         //     const response = await fetch(" ", {
         //       method: "POST",
