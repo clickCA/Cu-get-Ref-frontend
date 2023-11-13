@@ -30,11 +30,12 @@ function App() {
             ],
         },
         {
-            path: '/',
+            path: '/main/',
+
             element: <PrivateLayout />,
             children: [
                 {
-                    path: 'updateProfileStudent',
+                    path: '',
                     element: <UpdateProfileStudent />,
                 },
                 {
