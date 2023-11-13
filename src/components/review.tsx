@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -71,7 +69,7 @@ export function Review() {
                         <div>
                             <h2>Course Viewer</h2>
                             {courses.map((course) => (
-                                <CourseInfo key={course.id} course={course} />
+                                <CourseInfo key={course.courseId} course={course} />
                             ))}
                         </div>
                         <form className='space-y-4 md:space-y-6' action='#'>
@@ -81,7 +79,7 @@ export function Review() {
                                     <Input id='rating' type='number' min='1' max='5' />
                                 </div>
 
-                                <Textarea htmlFor='message' placeholder='Review here' />
+                                <Textarea placeholder='Review here' />
                             </div>
                         </form>
                     </div>

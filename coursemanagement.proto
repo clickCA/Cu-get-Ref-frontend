@@ -1,0 +1,43 @@
+syntax ="proto3";
+option go_package = "course-management-service/course_management";
+
+service CourseManagementService {
+    rpc GetAllCourses (Empty) returns (CourseList) {}
+    rpc GetCourse (CourseId) returns (CourseItem) {}
+    rpc AddNewCourse (CourseItem) returns (CourseItem) {}
+    rpc UpdateCourseDetail (CourseItem) returns (CourseItem) {}
+    rpc DeleteCourse (CourseId) returns (Empty) {}
+}
+
+message Professor {
+    string professor_name = 1;
+}
+
+message Prerequisite {
+    string course_id = 1;
+}
+
+message Empty{}
+
+message CourseItem {
+    string course_id = 1; // course id Ex. 2110415
+    string course_name = 2; // course name Ex. Software Architecture
+    string course_description = 3; // course contents Ex. [1. Introduction to Software Architecture]
+    string faculty_department = 4; // department name Ex. Computer Engineering
+    string academic_term = 5; // term name Ex. 1 , 2 , summer
+    int32 academic_year = 6; // year of term Ex. 2563
+    repeated Professor professors = 7; // professors name Ex. [somchai jaidee]
+    repeated Prerequisite prerequisites = 8; // course id Ex. [2110416]
+    string status = 9; // course status Ex. open , close
+    string curriculum_name = 10; // computer engineering
+    string degree_level = 11; // bachelor , master , doctor
+    int32 teaching_hours = 12; // teaching hours Ex. 3
+}
+
+message CourseList{
+    repeated CourseItem course=1; // course list
+}
+
+message CourseId{
+    string course_id=1; // course id Ex. 2110415
+}

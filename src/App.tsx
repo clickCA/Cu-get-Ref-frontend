@@ -36,7 +36,9 @@ function App() {
             children: [
                 {
                     path: '',
-                    element: <ProfileStudentPage />,
+                    element: (
+                        <ProfileStudentPage email='' major='' name='student' password='123' studentID='1' year='1' />
+                    ),
                 },
                 {
                     path: 'review',
