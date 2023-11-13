@@ -7,32 +7,41 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { login, Role, AuthRequest, LoginResponse, roleMapper, enumMapper } from '@/api/authService'
-import { useState } from 'react'
+import { login, Role, AuthRequest, roleMapper, enumMapper } from '@/api/authService'
+import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (Cookies.get('token')) {
+            window.location.href = '/'
+        }
+    }, [])
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
+        setError(null)
         const body: AuthRequest = {
             email: event.target[0].value,
             password: event.target[1].value,
             role: enumMapper(event.target[3].value),
         }
         setIsLoading(true)
-        const response: LoginResponse | null = await login(import.meta.env.VITE_AUTH_SERVER, body)
+        await login(import.meta.env.VITE_AUTH_SERVER, body)
             .catch((error) => {
                 setError(error.message)
                 return null
             })
-            .then((response) => {
-                return response
+            .then(() => {
+                navigate('/')
             })
-        console.table(response)
         setIsLoading(false)
     }
     const LoginForm = () => {

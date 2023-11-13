@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+
 export enum Role {
     Admin = 0,
     Student = 1,
@@ -24,31 +26,32 @@ export interface AuthRequest {
 }
 
 export async function login(path: string, body: AuthRequest): Promise<LoginResponse> {
-    try {
-        const response = await fetch(`${path}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: body.email, // Replace with actual email input value
-                password: body.password, // Replace with actual password input value
-                role: body.role, // Use the selected role
-            }),
+    await fetch(`${path}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: body.email, // Replace with actual email input value
+            password: body.password, // Replace with actual password input value
+            role: body.role, // Use the selected role
+        }),
+    })
+        .then((res) => {
+            if (res.ok) {
+                return res.json().then((data) => {
+                    // 1/48 = 30 minutes
+                    const expire = 1 / 48
+                    Cookies.set('token', data.token, { expires: expire })
+                })
+            } else {
+                throw new Error('Login failed')
+            }
         })
-
-        if (response.ok) {
-            const message: AuthResponse = response.body
-            // Login was successful, handle accordingly (e.g., redirect to another page)
-            return message
-        } else {
-            // Login failed, handle accordingly (e.g., show an error message)
-            throw new Error('Login failed')
-        }
-    } catch (error) {
-        // Handle network or request errors
-        throw new Error("Couldn't connect to the server")
-    }
+        .catch((err) => {
+            if (err.message === 'Login failed') throw new Error('Login failed')
+            throw new Error("Couldn't connect to the server")
+        })
 }
 
 export async function register(path: string, body: AuthRequest): Promise<RegisterResponse> {
@@ -74,6 +77,7 @@ export async function register(path: string, body: AuthRequest): Promise<Registe
             throw new Error('Register failed')
         }
     } catch (error) {
+        if (error.message === 'Register failed') throw new Error('Register failed')
         // Handle network or request errors
         throw new Error("Couldn't connect to the server")
     }
