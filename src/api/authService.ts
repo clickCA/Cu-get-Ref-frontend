@@ -41,7 +41,7 @@ export async function login(path: string, body: AuthRequest) {
             if (res.ok) {
                 return res.json().then((data: LoginResponse) => {
                     // 1/48 = 30 minutes
-                    const expire = import.meta.env.VITE_TOKEN_EXPIRE
+                    const expire = 1 / 48
                     Cookies.set('token', data.token, { expires: expire })
                 })
             } else {
