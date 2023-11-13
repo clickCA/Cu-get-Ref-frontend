@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
+import Sidebar from '@/components/sidebar'
 
 export default function PrivateLayout() {
     const HOME_PAGE = '/'
@@ -11,5 +12,14 @@ export default function PrivateLayout() {
         }
     }, [])
 
-    return <Outlet />
+    return (
+        <div className='flex'>
+            <div className='w-56 justify-self-start grow-0'>
+                <Sidebar />
+            </div>
+            <div className='grow '>
+                <Outlet />
+            </div>
+        </div>
+    )
 }
