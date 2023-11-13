@@ -4,30 +4,57 @@ import LoginPage from './pages/LoginPage'
 import UpdateProfileStudent from './components/profileStudent'
 import Review from './components/review'
 import AddCourse from './courseManagement/addCourse'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import PublicLayout from './layout/PublicLayout'
+import PrivateLayout from './layout/PrivateLayout'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
-    const routes = [
+    const routes: RouteObject[] = [
         {
             path: '/',
-            element: <RegisterPage />,
+            element: <PublicLayout />,
+            children: [
+                {
+                    path: '',
+                    element: <RegisterPage />,
+                },
+                {
+                    path: 'login',
+                    element: <LoginPage />,
+                },
+                {
+                    path: '*',
+                    element: <NotFoundPage />,
+                },
+            ],
         },
         {
-            path: '/login',
-            element: <LoginPage />,
-        },
-        {
-            path: '/updateProfileStudent',
-            element: <UpdateProfileStudent />,
-        },
-        {
-            path: '/review',
-            element: <Review />,
-        },
+            path: '/',
+            element: <PrivateLayout />,
+            children: [
+                {
+                    path: 'updateProfileStudent',
+                    element: <UpdateProfileStudent />,
+                },
+                {
+                    path: 'review',
+                    element: <Review />,
+                },
 
+                {
+                    path: 'form',
+                    element: <AddCourse />,
+                },
+                {
+                    path: '*',
+                    element: <NotFoundPage />,
+                },
+            ],
+        },
         {
-            path: '/form',
-            element: <AddCourse />,
+            path: '*',
+            element: <NotFoundPage />,
         },
     ]
 
