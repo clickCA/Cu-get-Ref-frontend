@@ -1,7 +1,8 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useLocation } from 'react-router-dom'
-import { CourseItemInterface } from '@/api/courseService'
-import { useEffect } from 'react'
+import { CourseItemInterface, addNewCourse, updateCourseDetail } from '@/api/courseService'
+import { Icons } from '@/components/icons'
+import { useState } from 'react'
 
 interface AddCourseProps {
     course?: CourseItemInterface
@@ -10,9 +11,71 @@ interface AddCourseProps {
 const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
     const location = useLocation()
     const courseData = location.state as { course: CourseItemInterface }
-    useEffect(() => {
-        console.log(courseData)
-    })
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        const target = event.target as typeof event.target & {
+            courseId: { value: string }
+            courseName: { value: string }
+            courseDescription: { value: string }
+            facultyDepartment: { value: string }
+            academicTerm: { value: string }
+            academicYear: { value: string }
+            professors: { value: string }
+            prerequisites: { value: string }
+            status: { value: string }
+            curriculumName: { value: string }
+            degreeLevel: { value: string }
+            teachingHours: { value: string }
+        }
+        const body: CourseItemInterface = {
+            course_id: target.courseId.value,
+            course_name: target.courseName.value,
+            course_description: target.courseDescription.value,
+            faculty_department: target.facultyDepartment.value,
+            academic_term: target.academicTerm.value,
+            academic_year: parseInt(target.academicYear.value),
+            professors: [
+                {
+                    professor_name: target.professors.value,
+                },
+            ],
+            prerequisites: [
+                {
+                    course_id: target.prerequisites.value,
+                },
+            ],
+            status: target.status.value,
+            curriculum_name: target.curriculumName.value,
+            degree_level: target.degreeLevel.value,
+            teaching_hours: parseInt(target.teachingHours.value),
+        }
+        setIsLoading(true)
+        if (courseData?.course.course_id) {
+            // Update
+            await updateCourseDetail(import.meta.env.VITE_COURSE_SERVER, body)
+                .then((data) => {
+                    console.log('update data', data)
+                    window.location.href = '/main/form'
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        } else {
+            // Create
+            await addNewCourse(import.meta.env.VITE_COURSE_SERVER, body)
+                .then((data) => {
+                    console.log('add data', data)
+                    window.location.href = '/main/form'
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+        setIsLoading(false)
+    }
+
     return (
         <section className='bg-gray-50 dark:bg-gray-900'>
             <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
@@ -36,7 +99,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                         <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
                             Add course
                         </h1>
-                        <form className='space-y-4 md:space-y-6' action='#'>
+                        <form className='space-y-4 md:space-y-6' action='#' onSubmit={onSubmit}>
                             <div>
                                 <label
                                     htmlFor='email'
@@ -50,7 +113,8 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='courseId'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                     placeholder='2110xxx'
-                                    defaultValue={course?.course_id}
+                                    defaultValue={courseData?.course.course_id}
+                                    disabled={courseData?.course.course_id ? true : false}
                                     required
                                 />
                             </div>
@@ -67,6 +131,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='courseName'
                                     placeholder='Software Architecture'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.course_name}
                                     required
                                 />
                             </div>
@@ -83,6 +148,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='courseDescription'
                                     placeholder=' '
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.course_description}
                                     required
                                 />
                             </div>
@@ -99,16 +165,19 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='facultyDepartment'
                                     placeholder='Computer Engineer'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.faculty_department}
                                     required
                                 />
                             </div>
-                            <Select>
+                            <Select name='academicTerm'>
                                 <SelectTrigger className='academicTerm'>
-                                    <SelectValue placeholder='Academic Term' />
+                                    <SelectValue
+                                        defaultValue={courseData?.course.academic_term}
+                                        placeholder='Academic Term'
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        {/* <SelectLabel>Roles</SelectLabel> */}
                                         <SelectItem value='First Semester'>First Semester</SelectItem>
                                         <SelectItem value='Seconnd Semester'>Second Semester</SelectItem>
                                     </SelectGroup>
@@ -127,6 +196,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='academicYear'
                                     placeholder='2021'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.academic_year}
                                     required
                                 />
                             </div>
@@ -142,6 +212,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     name='professors'
                                     id='professors'
                                     placeholder='Aj.XXXX'
+                                    defaultValue={courseData?.course.professors[0].professor_name}
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                     required
                                 />
@@ -157,27 +228,23 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     type='text'
                                     name='prerequisites'
                                     id='prerequisites'
+                                    defaultValue={courseData?.course.prerequisites[0].course_id}
                                     placeholder='xxxx'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                     required
                                 />
                             </div>
-                            <div>
-                                <label
-                                    htmlFor='status'
-                                    className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                                >
-                                    Status
-                                </label>
-                                <input
-                                    type='text'
-                                    name='status'
-                                    id='status'
-                                    placeholder='Open'
-                                    className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                    required
-                                />
-                            </div>
+                            <Select name='status'>
+                                <SelectTrigger className='status'>
+                                    <SelectValue defaultValue={courseData?.course.status} placeholder='Open' />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value='open'>Open</SelectItem>
+                                        <SelectItem value='close'>Close</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                             <div>
                                 <label
                                     htmlFor='curriculumName'
@@ -191,18 +258,22 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     id='curriculumName'
                                     placeholder='XXXXX'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.curriculum_name}
                                     required
                                 />
                             </div>
-                            <Select>
+                            <Select name='degreeLevel'>
                                 <SelectTrigger className='degreeLevel'>
-                                    <SelectValue placeholder='Degree Level' />
+                                    <SelectValue
+                                        defaultValue={courseData?.course.degree_level}
+                                        placeholder='Degree Level'
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        {/* <SelectLabel>Roles</SelectLabel> */}
-                                        <SelectItem value='Undergraduate'>Undergraduate</SelectItem>
-                                        <SelectItem value='Graduated'>Graduated</SelectItem>
+                                        <SelectItem value='bachelor'>Bachelor</SelectItem>
+                                        <SelectItem value='master'>Master</SelectItem>
+                                        <SelectItem value='doctoral'>Doctoral</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -214,10 +285,11 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     Teaching Hours
                                 </label>
                                 <input
-                                    type='time'
+                                    type='number'
                                     name='teachingHours'
                                     id='teachingHours'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    defaultValue={courseData?.course.teaching_hours.toString()}
                                     required
                                 />
                             </div>
@@ -225,7 +297,9 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                             <button
                                 type='submit'
                                 className='w-full bg-black hover:bg-black text-white font-medium rounded-lg px-4 py-2 mt-6'
+                                disabled={isLoading}
                             >
+                                {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
                                 Add course
                             </button>
                         </form>

@@ -73,12 +73,13 @@ export async function getCourse(path: string, body: CourseId) {
         })
 }
 
-export async function addNewCourse(path: string, body: CourseId) {
-    return await fetch(`${path}/courses/${body.course_id}`, {
+export async function addNewCourse(path: string, body: CourseItemInterface) {
+    return await fetch(`${path}/courses`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify(body),
     })
         .then((res) => {
             if (res.ok) {
@@ -95,12 +96,13 @@ export async function addNewCourse(path: string, body: CourseId) {
         })
 }
 
-export async function updateCourseDetail(path: string, body: CourseId) {
+export async function updateCourseDetail(path: string, body: CourseItemInterface) {
     return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify(body),
     })
         .then((res) => {
             if (res.ok) {
