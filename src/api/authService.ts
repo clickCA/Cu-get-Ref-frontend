@@ -42,6 +42,8 @@ export async function login(path: string, body: AuthRequest) {
                 return res.json().then((data: LoginResponse) => {
                     // 1/48 = 30 minutes
                     const expire = 1 / 48
+                    Cookies.set('user', body.email, { expires: expire })
+                    Cookies.set('role', roleMapper(body.role), { expires: expire })
                     Cookies.set('token', data.token, { expires: expire })
                 })
             } else {
