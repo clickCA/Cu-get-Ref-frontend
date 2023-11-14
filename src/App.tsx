@@ -1,7 +1,8 @@
 import './App.css'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
-import ProfileStudentPage from './pages/ProfileStudentPage'
+import ProfilePage from './pages/ProfilePage'
+import UpdateProfilePage from './pages/UpdateProfilePage'
 import ReviewPage from './pages/ReviewPage'
 import AddCoursePage from './pages/AddCoursePage'
 import AllCoursePage from './pages/AllCoursePage'
@@ -37,9 +38,11 @@ function App() {
             children: [
                 {
                     path: '',
-                    element: (
-                        <ProfileStudentPage email='' major='' name='student' password='123' studentID='1' year='1' />
-                    ),
+                    element: <ProfilePage />,
+                },
+                {
+                    path: 'update',
+                    element: <UpdateProfilePage />,
                 },
                 {
                     path: 'form',

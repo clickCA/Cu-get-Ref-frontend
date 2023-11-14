@@ -153,6 +153,8 @@ export default function Sidebar({ className }: SidebarProps) {
         const path = window.location.pathname
         if (path === '/main/') {
             setActive([true, false, false, false, false])
+        } else if (path === '/main/update') {
+            setActive([false, true, false, false, false])
         } else if (path === '/main/form') {
             setActive([false, false, true, false, false])
         } else if (path === '/main/form/create') {
@@ -195,7 +197,7 @@ export default function Sidebar({ className }: SidebarProps) {
                             active={active[1]}
                             onClick={() => {
                                 setActive([false, true, false, false, false])
-                                navigate('/main/')
+                                navigate('/main/update')
                             }}
                         >
                             {SVG_IMAGES.Profile}

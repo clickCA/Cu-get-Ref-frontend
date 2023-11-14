@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ProfileStudentInterface } from '@/interface/ProfileStudent'
 import { Button } from '@/components/ui/button'
 import { createProfile, UserType } from '@/api/profileService'
 
-const UpdateProfileStudent: React.FC<ProfileStudentInterface> = () => {
+const UpdateProfileStudent: React.FC = () => {
     const [name, setName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [year, setYear] = useState<string>('')
