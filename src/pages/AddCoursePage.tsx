@@ -8,7 +8,7 @@ interface AddCourseProps {
     course?: CourseItemInterface
 }
 
-const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
+const AddCourse: React.FC<AddCourseProps> = () => {
     const location = useLocation()
     const courseData = location.state as { course: CourseItemInterface }
     const [isLoading, setIsLoading] = useState<boolean>(false)
