@@ -25,13 +25,18 @@ const Login = () => {
         }
     }, [])
 
-    async function onSubmit(event: React.SyntheticEvent) {
+    async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setError(null)
+        const target = event.target as typeof event.target & {
+            email: { value: string }
+            password: { value: string }
+            role: { value: string }
+        }
         const body: AuthRequest = {
-            email: event.target[0].value,
-            password: event.target[1].value,
-            role: enumMapper(event.target[3].value),
+            email: target.email.value,
+            password: target.password.value,
+            role: enumMapper(target.role.value),
         }
         setIsLoading(true)
         await login(import.meta.env.VITE_AUTH_SERVER, body)
@@ -84,7 +89,7 @@ const Login = () => {
                                 required
                             />
                         </div>
-                        <Select>
+                        <Select name='role'>
                             <SelectTrigger className=''>
                                 <SelectValue placeholder='please select role' />
                             </SelectTrigger>
