@@ -102,7 +102,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Roles</SelectLabel>
-                                    <SelectItem value={roleMapper(Role.Admin)}>Admin</SelectItem>
+                                    {/* <SelectItem value={roleMapper(Role.Admin)}>Admin</SelectItem> */}
                                     <SelectItem value={roleMapper(Role.Student)}>Student</SelectItem>
                                     <SelectItem value={roleMapper(Role.Professor)}>Teacher</SelectItem>
                                 </SelectGroup>
