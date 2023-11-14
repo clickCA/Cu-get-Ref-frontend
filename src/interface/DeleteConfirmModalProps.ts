@@ -1,8 +1,8 @@
-import { CourseInterface } from "./Course";
+import { CourseItemInterface } from '@/api/courseService'
 
 export default interface DeleteConfirmModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onConfirm: (courseId: string) => void;
-    course: CourseInterface;
+    isOpen: boolean
+    onClose: () => void
+    onConfirm: (courseId: string) => void
+    course: CourseItemInterface
 }
