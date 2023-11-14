@@ -44,7 +44,7 @@ export async function getAllCourses(path: string) {
             }
         })
         .catch((err) => {
-            if (err.message === 'Get Courses failed') throw new Error('Get Courses failed')
+            if (err.message === 'Get All Courses failed') throw new Error('Get All Courses failed')
             throw new Error("Couldn't connect to the server")
         })
 }
@@ -115,8 +115,12 @@ export async function updateCourseDetail(path: string, body: ReadRequest) {
         })
 }
 
-export async function deleteCourse(path: string, body: ReadRequest) {
-    return await fetch(`${path}/courses/{course_id}`, {
+export interface DeleteRequest {
+    course_id: string
+}
+
+export async function deleteCourse(path: string, body: DeleteRequest) {
+    return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -124,15 +128,15 @@ export async function deleteCourse(path: string, body: ReadRequest) {
     })
         .then((res) => {
             if (res.ok) {
-                return res.json().then((data: ReadResponse) => {
-                    return data
+                return res.json().then(() => {
+                    console.log('Finish delete course')
                 })
             } else {
-                throw new Error('Read Profile failed')
+                throw new Error('Delete course failed')
             }
         })
         .catch((err) => {
-            if (err.message === 'Read Profile failed') throw new Error('Read Profile failed')
+            if (err.message === 'Delete course failed') throw new Error('Delete course failed')
             throw new Error("Couldn't connect to the server")
         })
 }
