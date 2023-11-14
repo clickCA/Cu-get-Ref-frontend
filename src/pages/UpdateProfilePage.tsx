@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import {
-    createProfile,
-    CreateRequest,
-    readProfile,
-    ReadRequest,
-    ReadResponse,
-    roleMapper,
-    UserType,
-} from '@/api/profileService'
+import { createProfile, CreateRequest, readProfile, ReadRequest, ReadResponse, roleMapper } from '@/api/profileService'
 import Cookies from 'js-cookie'
 
 const UpdateProfileStudent = () => {
@@ -100,7 +92,7 @@ const UpdateProfileStudent = () => {
                         <div className='w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
                             <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>
                                 <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
-                                    Profile Update
+                                    Profile Update {user.user.ID}
                                 </h1>
                                 <form onSubmit={handleSubmit} className='space-y-4 md:space-y-6' action='#'>
                                     <div className='grid w-full items-center gap-4'>
