@@ -5,6 +5,8 @@ import Cookies from 'js-cookie'
 
 export default function ProfilePage() {
     const [isLoad, setIsLoad] = useState(true)
+    const [currentRole, setCurrentRole] = useState<string>('')
+    const [currentEmail, setCurrentEmail] = useState<string>('')
     const [user, setUser] = useState<ReadResponse>({} as ReadResponse)
 
     useEffect(() => {
@@ -27,6 +29,8 @@ export default function ProfilePage() {
             })
         } else {
             const role = Cookies.get('role')
+            setCurrentEmail(user!)
+            setCurrentRole(role!)
             const readRequest: ReadRequest = {
                 id: isCreated,
                 userType: roleMapper(role!),
@@ -65,6 +69,16 @@ export default function ProfilePage() {
                             </CardTitle>
                             <CardDescription>contain all information</CardDescription>
                         </CardHeader>
+                        <CardContent>
+                            <p>
+                                <b>Email</b> {currentEmail}
+                            </p>
+                        </CardContent>
+                        <CardContent>
+                            <p>
+                                <b>Role</b> {currentRole}
+                            </p>
+                        </CardContent>
                         <CardContent>
                             <p>
                                 <b>ID</b> {user.user.ID}
