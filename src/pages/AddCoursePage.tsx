@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { CourseItemInterface, addNewCourse, updateCourseDetail } from '@/api/courseService'
 import { Icons } from '@/components/icons'
 import { useState } from 'react'
@@ -12,6 +12,9 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
     const location = useLocation()
     const courseData = location.state as { course: CourseItemInterface }
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
+    const ALL_COURSES = '/main/form'
+    const navigate = useNavigate()
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -52,25 +55,30 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
             teaching_hours: parseInt(target.teachingHours.value),
         }
         setIsLoading(true)
+        setError(null)
         if (courseData?.course.course_id) {
             // Update
             await updateCourseDetail(import.meta.env.VITE_COURSE_SERVER, body)
                 .then((data) => {
                     console.log('update data', data)
-                    window.location.href = '/main/form'
+                    navigate(ALL_COURSES)
+                    setIsLoading(false)
+                    navigate(0)
                 })
                 .catch((error) => {
-                    console.log(error)
+                    setError(error.message)
                 })
         } else {
             // Create
             await addNewCourse(import.meta.env.VITE_COURSE_SERVER, body)
                 .then((data) => {
                     console.log('add data', data)
-                    window.location.href = '/main/form'
+                    navigate(ALL_COURSES)
+                    setIsLoading(false)
+                    navigate(0)
                 })
                 .catch((error) => {
-                    console.log(error)
+                    setError(error.message)
                 })
         }
         setIsLoading(false)
@@ -169,7 +177,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     required
                                 />
                             </div>
-                            <Select name='academicTerm'>
+                            <Select name='academicTerm' required>
                                 <SelectTrigger className='academicTerm'>
                                     <SelectValue
                                         defaultValue={courseData?.course.academic_term}
@@ -178,8 +186,9 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem value='First Semester'>First Semester</SelectItem>
-                                        <SelectItem value='Seconnd Semester'>Second Semester</SelectItem>
+                                        <SelectItem value='1'>First Semester</SelectItem>
+                                        <SelectItem value='2'>Second Semester</SelectItem>
+                                        <SelectItem value='3'>Summer</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -234,7 +243,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     required
                                 />
                             </div>
-                            <Select name='status'>
+                            <Select name='status' required>
                                 <SelectTrigger className='status'>
                                     <SelectValue defaultValue={courseData?.course.status} placeholder='Open' />
                                 </SelectTrigger>
@@ -262,7 +271,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                     required
                                 />
                             </div>
-                            <Select name='degreeLevel'>
+                            <Select name='degreeLevel' required>
                                 <SelectTrigger className='degreeLevel'>
                                     <SelectValue
                                         defaultValue={courseData?.course.degree_level}
@@ -302,6 +311,11 @@ const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
                                 {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
                                 Add course
                             </button>
+                            {error && (
+                                <div className='text-red-500 text-sm font-medium'>
+                                    <p>{error}</p>
+                                </div>
+                            )}
                         </form>
                     </div>
                 </div>
