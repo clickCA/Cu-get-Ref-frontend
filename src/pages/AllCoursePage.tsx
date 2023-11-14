@@ -1,4 +1,4 @@
-import { getAllCourses, CoursesInterface, CourseItemInterface, DeleteRequest, deleteCourse } from '@/api/courseService'
+import { getAllCourses, CoursesInterface, CourseItemInterface, CourseId, deleteCourse } from '@/api/courseService'
 import DeleteConfirmModal from '@/components/DeleteConfirmModal'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -38,7 +38,7 @@ const AllCoursePage = () => {
         setIsModalOpen(false)
         // Here you can add logic to delete the course from the state or backend
         // For example, filtering out the deleted course:
-        const req: DeleteRequest = {
+        const req: CourseId = {
             course_id: courseId,
         }
         setIsLoad(true)

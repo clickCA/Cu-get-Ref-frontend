@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie'
-
 export interface CoursesInterface {
     course: CourseItemInterface[]
 }
@@ -26,6 +24,10 @@ export interface PrerequisiteInterface {
     course_id: string
 }
 
+export interface CourseId {
+    course_id: string
+}
+
 export async function getAllCourses(path: string) {
     return await fetch(`${path}/courses`, {
         method: 'GET',
@@ -49,8 +51,8 @@ export async function getAllCourses(path: string) {
         })
 }
 
-export async function getCourse(path: string, body: ReadRequest) {
-    return await fetch(`${path}/courses/{course_id}`, {
+export async function getCourse(path: string, body: CourseId) {
+    return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -58,21 +60,21 @@ export async function getCourse(path: string, body: ReadRequest) {
     })
         .then((res) => {
             if (res.ok) {
-                return res.json().then((data: ReadResponse) => {
+                return res.json().then((data: CourseItemInterface) => {
                     return data
                 })
             } else {
-                throw new Error('Read Profile failed')
+                throw new Error('Get Course failed')
             }
         })
         .catch((err) => {
-            if (err.message === 'Read Profile failed') throw new Error('Read Profile failed')
+            if (err.message === 'Get Course failed') throw new Error('Get Course failed')
             throw new Error("Couldn't connect to the server")
         })
 }
 
-export async function addNewCourse(path: string, body: ReadRequest) {
-    return await fetch(`${path}/courses/{course_id}`, {
+export async function addNewCourse(path: string, body: CourseId) {
+    return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -80,21 +82,21 @@ export async function addNewCourse(path: string, body: ReadRequest) {
     })
         .then((res) => {
             if (res.ok) {
-                return res.json().then((data: ReadResponse) => {
+                return res.json().then((data: CourseItemInterface) => {
                     return data
                 })
             } else {
-                throw new Error('Read Profile failed')
+                throw new Error('Create New Course failed')
             }
         })
         .catch((err) => {
-            if (err.message === 'Read Profile failed') throw new Error('Read Profile failed')
+            if (err.message === 'Create New Course failed') throw new Error('Create New Course failed')
             throw new Error("Couldn't connect to the server")
         })
 }
 
-export async function updateCourseDetail(path: string, body: ReadRequest) {
-    return await fetch(`${path}/courses/{course_id}`, {
+export async function updateCourseDetail(path: string, body: CourseId) {
+    return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -102,24 +104,20 @@ export async function updateCourseDetail(path: string, body: ReadRequest) {
     })
         .then((res) => {
             if (res.ok) {
-                return res.json().then((data: ReadResponse) => {
+                return res.json().then((data: CourseItemInterface) => {
                     return data
                 })
             } else {
-                throw new Error('Read Profile failed')
+                throw new Error('Update Course Failed')
             }
         })
         .catch((err) => {
-            if (err.message === 'Read Profile failed') throw new Error('Read Profile failed')
+            if (err.message === 'Update Course Failed') throw new Error('Update Course Failed')
             throw new Error("Couldn't connect to the server")
         })
 }
 
-export interface DeleteRequest {
-    course_id: string
-}
-
-export async function deleteCourse(path: string, body: DeleteRequest) {
+export async function deleteCourse(path: string, body: CourseId) {
     return await fetch(`${path}/courses/${body.course_id}`, {
         method: 'DELETE',
         headers: {
