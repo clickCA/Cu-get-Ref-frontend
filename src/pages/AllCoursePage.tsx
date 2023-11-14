@@ -50,7 +50,6 @@ const AllCoursePage = () => {
                 console.log(err)
             })
         setIsLoad(false)
-        // setCourses(courses.filter((course) => course.courseId !== courseId))
     }
 
     const handleEdit = (course: CourseItemInterface) => {
