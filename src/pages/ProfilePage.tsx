@@ -66,9 +66,6 @@ export default function ProfilePage() {
                         <b>DeletedAt</b> {user.user.DeletedAt}
                     </p>
                 </CardContent>
-                <CardFooter>
-                    <p>That all</p>
-                </CardFooter>
             </Card>
         )
     }
