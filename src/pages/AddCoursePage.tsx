@@ -1,5 +1,14 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-const AddCourse = () => {
+import { CourseInterface, CourseProps } from '@/interface/Course';
+import { useLocation } from 'react-router-dom';
+
+interface AddCourseProps {
+    course?: CourseProps;
+}
+
+const AddCourse: React.FC<AddCourseProps> = ({ course }) => {
+    const location = useLocation();
+    const courseData = location.state as { course: CourseInterface };
     return (
         <section className='bg-gray-50 dark:bg-gray-900'>
             <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
@@ -37,6 +46,7 @@ const AddCourse = () => {
                                     id='courseId'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-black-600 focus:border-black-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                     placeholder='2110xxx'
+                                    defaultValue={course?.courseId}
                                     required
                                 />
                             </div>
