@@ -3,72 +3,21 @@ import DeleteConfirmModal from '@/components/DeleteConfirmModal'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const mockCourses: CoursesInterface = {
-    course: [
-        {
-            course_id: 'CSCI101',
-            course_name: 'Introduction to Computer Science',
-            course_description: 'An introductory course to the fundamentals of computer science',
-            faculty_department: 'Computer Science',
-            academic_term: 'Fall',
-            academic_year: 2023,
-            professors: [
-                {
-                    professor_name: 'Prof. John Doe',
-                },
-            ],
-            prerequisites: [
-                {
-                    course_id: 'None',
-                },
-            ],
-            status: 'Open',
-            curriculum_name: 'BSc Computer Science',
-            degree_level: 'Undergraduate',
-            teaching_hours: 3,
-        },
-        {
-            course_id: 'MATH201',
-            course_name: 'Advanced Mathematics',
-            course_description: 'A detailed look into advanced mathematical theories',
-            faculty_department: 'Mathematics',
-            academic_term: 'Spring',
-            academic_year: 2023,
-            professors: [
-                {
-                    professor_name: 'Prof. Jane Smith',
-                },
-            ],
-            prerequisites: [
-                {
-                    course_id: 'MATH101',
-                },
-            ],
-            status: 'Open',
-            curriculum_name: 'BSc Mathematics',
-            degree_level: 'Undergraduate',
-            teaching_hours: 4,
-        },
-        // Add more courses as needed
-    ],
-}
-
 const AllCoursePage = () => {
     const [selectedCourse, setSelectedCourse] = useState<CourseItemInterface | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [courses, setCourses] = useState<CoursesInterface>(mockCourses)
+    const [courses, setCourses] = useState<CoursesInterface>({} as CoursesInterface)
     const navigate = useNavigate()
 
     useEffect(() => {
         // Here you can fetch the courses from the backend
         // and set the state accordingly
-        // onStart()
+        onStart()
     }, [])
 
-    const onStart = async () => {
-        console.log('onStart')
-        await getAllCourses(import.meta.env.VITE_COURSE_SERVER).then(() => {
-            // setCourses(courses)
+    const onStart = () => {
+        getAllCourses(import.meta.env.VITE_COURSE_SERVER).then((data: CoursesInterface) => {
+            setCourses(data)
         })
     }
 
@@ -99,26 +48,27 @@ const AllCoursePage = () => {
                             All Courses
                         </h1>
                         <div className='space-y-4 md:space-y-6'>
-                            {courses.course.map((course) => (
-                                <div key={course.course_id} className='bg-white p-4 rounded-lg shadow-md'>
-                                    <h2 className='text-lg font-bold'>{course.course_name}</h2>
-                                    <p>{course.course_description}</p>
-                                    {/* Edit button */}
-                                    <button
-                                        onClick={() => handleEdit(course)}
-                                        className='w-full bg-black hover:bg-gray-700 text-white font-medium rounded-lg px-4 py-2 mt-6'
-                                    >
-                                        Edit
-                                    </button>
-                                    {/* Delete button */}
-                                    <button
-                                        onClick={() => handleDelete(course)}
-                                        className='w-full bg-black hover:bg-gray-700 text-white font-medium rounded-lg px-4 py-2 mt-6'
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            ))}
+                            {courses.course &&
+                                courses.course.map((course) => (
+                                    <div key={course.course_id} className='bg-white p-4 rounded-lg shadow-md'>
+                                        <h2 className='text-lg font-bold'>{course.course_name}</h2>
+                                        <p>{course.course_description}</p>
+                                        {/* Edit button */}
+                                        <button
+                                            onClick={() => handleEdit(course)}
+                                            className='w-full bg-black hover:bg-gray-700 text-white font-medium rounded-lg px-4 py-2 mt-6'
+                                        >
+                                            Edit
+                                        </button>
+                                        {/* Delete button */}
+                                        <button
+                                            onClick={() => handleDelete(course)}
+                                            className='w-full bg-black hover:bg-gray-700 text-white font-medium rounded-lg px-4 py-2 mt-6'
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                ))}
                         </div>
                     </div>
                 </div>

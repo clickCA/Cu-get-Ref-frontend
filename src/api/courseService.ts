@@ -27,7 +27,7 @@ export interface PrerequisiteInterface {
 }
 
 export async function getAllCourses(path: string) {
-    await fetch(`${path}/courses`, {
+    return await fetch(`${path}/courses`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export async function getAllCourses(path: string) {
             }
         })
         .catch((err) => {
-            if (err.message === 'Create Profile failed') throw new Error('Create Profile failed')
+            if (err.message === 'Get Courses failed') throw new Error('Get Courses failed')
             throw new Error("Couldn't connect to the server")
         })
 }
